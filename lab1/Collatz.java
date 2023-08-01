@@ -4,6 +4,8 @@
 public class Collatz {
 
     /** Buggy implementation of nextNumber! */
+
+    /**
     public static int nextNumber(int n) {
         if (n  == 128) {
             return 1;
@@ -12,6 +14,17 @@ public class Collatz {
         } else {
             return n * 2;
         }
+    }
+     */
+
+    /** Performs the Collatz algorithm and returns the next number in the sequence */
+    public static int nextNumber(int n) {
+        if (n == 1) return 1;
+        if (n % 2 == 0) {
+            return n /= 2;
+        }
+        ;
+        return n = (3 * n) + 1;
     }
 
     public static void main(String[] args) {
