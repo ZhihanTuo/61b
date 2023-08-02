@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author Zhihan Tuo
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -137,7 +137,12 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
-        // TODO: Fill in this function.
+        // Done
+        for (int i = 0; i < b.size(); i += 1) {
+            for (int j = 0; j < b.size(); j += 1) {
+                if (b.tile(i, j) == null) { return true; }
+            }
+        }
         return false;
     }
 
@@ -147,7 +152,14 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        // Done
+        for (int i = 0; i < b.size(); i += 1) {
+            for (int j = 0; j < b.size(); j += 1) {
+                if (b.tile(i, j) != null) {
+                    if (b.tile(i, j).value() == MAX_PIECE) { return true; }
+                }
+            }
+        }
         return false;
     }
 
@@ -158,8 +170,20 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
-        return false;
+        // Done
+        if (emptySpaceExists(b)) { return true; }
+
+        for (int i = 0; i < b.size() - 1; i += 1) {
+            for (int j = 0; j < b.size() - 1; j += 1) {
+                    if (b.tile(i, j).value() == b.tile(i + 1, j).value()
+                        || b.tile(i, j).value() == b.tile(i, j + 1).value()) {
+                        return true;
+                    }
+                }
+            }
+        /** Edge case for top right tile */
+        return (b.tile(b.size() - 1, b.size() - 1).value() == b.tile(b.size() - 2, b.size() - 1).value())
+                || (b.tile(b.size() - 1, b.size() - 1).value() == b.tile(b.size() - 1, b.size() - 2).value());
     }
 
 
