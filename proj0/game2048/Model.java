@@ -94,6 +94,8 @@ public class Model extends Observable {
         setChanged();
     }
 
+
+
     /** Tilt the board toward SIDE. Return true iff this changes the board.
      *
      * 1. If two Tile objects are adjacent in the direction of motion and have
@@ -113,6 +115,27 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+
+
+        if (atLeastOneMoveExists(this.board)) {
+            this.board.startViewingFrom(Side.NORTH);
+
+            for (int c = this.board.size() - 1; c >= 0; c -= 1) {
+                int rowDis = 0;
+                for (int r = this.board.size() - 1; r > 0; r -= 1) {
+                    if (this.board.tile(c, r) == null) {
+                        rowDis += 1;
+                    } else {
+                        board.move(c, r + rowDis, this.board.tile(c, r));
+                        rowDis = 0;
+                    }
+                }
+            }
+
+            this.board.setViewingPerspective(side);
+            changed = true;
+        }
+
 
         checkGameOver();
         if (changed) {
