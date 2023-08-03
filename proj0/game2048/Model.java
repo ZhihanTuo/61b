@@ -94,7 +94,17 @@ public class Model extends Observable {
         setChanged();
     }
 
-
+    /** Check for higher tiles with equal value and returns the tile's row location if equal */
+    public int targetRow(Tile myTile) {
+        int i = board.size() - 1;
+        Tile otherTile = board.tile(myTile.col(), i);
+        while (i > myTile.row()) {
+            i -= 1;
+            if (otherTile == null) { continue; }
+            if (myTile.value() == otherTile.value()) { return otherTile.row(); }
+        }
+        return myTile.row();
+    }
 
     /** Tilt the board toward SIDE. Return true iff this changes the board.
      *
@@ -115,26 +125,23 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        Tile myTile;
 
+        if (atLeastOneMoveExists(board)) { changed = true; }
 
-        if (atLeastOneMoveExists(this.board)) {
-            this.board.startViewingFrom(Side.NORTH);
+        //board.startViewingFrom(Side.NORTH);
 
-            for (int c = this.board.size() - 1; c >= 0; c -= 1) {
-                int rowDis = 0;
-                for (int r = this.board.size() - 1; r > 0; r -= 1) {
-                    if (this.board.tile(c, r) == null) {
-                        rowDis += 1;
-                    } else {
-                        board.move(c, r + rowDis, this.board.tile(c, r));
-                        rowDis = 0;
-                    }
+        for (int c = 0; c < board.size(); c += 1) {
+            for (int r = board.size() - 2; r >= 0; r -= 1) {
+                myTile = board.tile(c, r);
+                if (myTile != null) {
+                    board.move(c, targetRow(myTile), myTile);
                 }
             }
-
-            this.board.setViewingPerspective(side);
-            changed = true;
         }
+
+        //board.setViewingPerspective(side);
+        //changed = true;
 
 
         checkGameOver();
