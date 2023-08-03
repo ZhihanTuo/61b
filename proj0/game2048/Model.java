@@ -96,14 +96,20 @@ public class Model extends Observable {
 
     /** Check for higher tiles with equal value and returns the tile's row location if equal */
     public int targetRow(Tile myTile) {
+        int emptyTile = 0;
+
         int i = board.size() - 1;
-        Tile otherTile = board.tile(myTile.col(), i);
+        Tile otherTile;
         while (i > myTile.row()) {
+            otherTile = board.tile(myTile.col(), i);
             i -= 1;
-            if (otherTile == null) { continue; }
+            if (otherTile == null) {
+                emptyTile += 1;
+                continue;
+            }
             if (myTile.value() == otherTile.value()) { return otherTile.row(); }
         }
-        return myTile.row();
+        return myTile.row() + emptyTile;
     }
 
     /** Tilt the board toward SIDE. Return true iff this changes the board.
@@ -129,7 +135,7 @@ public class Model extends Observable {
 
         if (atLeastOneMoveExists(board)) { changed = true; }
 
-        //board.startViewingFrom(Side.NORTH);
+        board.startViewingFrom(Side.NORTH);
 
         for (int c = 0; c < board.size(); c += 1) {
             for (int r = board.size() - 2; r >= 0; r -= 1) {
@@ -140,9 +146,7 @@ public class Model extends Observable {
             }
         }
 
-        //board.setViewingPerspective(side);
-        //changed = true;
-
+        board.setViewingPerspective(side);
 
         checkGameOver();
         if (changed) {
