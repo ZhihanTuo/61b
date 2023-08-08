@@ -94,8 +94,9 @@ public class Model extends Observable {
         setChanged();
     }
 
-    /** Check for higher tiles with equal value and returns the tile's row location if equal */
-    public int targetRow(Tile myTile) {
+    /** Check for higher tiles with equal value and returns the tile's row location if equal.
+     *  If no equal tile is found, return sum of empty rows above myTile + myTile.row(). */
+    public int targetRow(Tile myTile, boolean prevMerge) {
         int emptyTile = 0;
 
         int i = board.size() - 1;
@@ -103,11 +104,12 @@ public class Model extends Observable {
         while (i > myTile.row()) {
             otherTile = board.tile(myTile.col(), i);
             i -= 1;
+            // Keep track of empty tiles
             if (otherTile == null) {
                 emptyTile += 1;
                 continue;
             }
-            if (myTile.value() == otherTile.value()) { return otherTile.row(); }
+            if (myTile.value() == otherTile.value() && !prevMerge) { return otherTile.row(); }
         }
         return myTile.row() + emptyTile;
     }
@@ -132,21 +134,33 @@ public class Model extends Observable {
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
         Tile myTile;
+        boolean merged;
+        boolean prevMerge;
+        int newRow = 0;
+        Board startingBoard = board;
 
-        if (atLeastOneMoveExists(board)) { changed = true; }
-
-        board.startViewingFrom(Side.NORTH);
+        board.startViewingFrom(side);
 
         for (int c = 0; c < board.size(); c += 1) {
+            prevMerge = false;
+            // Start on row[2], row[3] tiles are not required to be moved
             for (int r = board.size() - 2; r >= 0; r -= 1) {
                 myTile = board.tile(c, r);
+                merged = false;
                 if (myTile != null) {
-                    board.move(c, targetRow(myTile), myTile);
+                    newRow = targetRow(myTile, prevMerge);
+                    merged = board.move(c, newRow, myTile);
+                }
+                if (merged) {
+                    score += board.tile(c, newRow).value();
+                    prevMerge = true;
                 }
             }
         }
 
-        board.setViewingPerspective(side);
+        board.setViewingPerspective(Side.NORTH);
+
+        if (startingBoard == board) { changed = true; }
 
         checkGameOver();
         if (changed) {
