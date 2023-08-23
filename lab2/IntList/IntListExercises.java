@@ -14,6 +14,8 @@ public class IntListExercises {
             head.first += c;
             head = head.rest;
         }
+        // BUG: the constant was never added to the last node's first because its rest was null
+        head.first += c;
     }
 
     /**
@@ -26,9 +28,19 @@ public class IntListExercises {
     public static void setToZeroIfMaxFEL(IntList L) {
         IntList p = L;
         while (p != null) {
+            // BUG: firstDigitEqualsLastDigit(10) is an edge case
             if (firstDigitEqualsLastDigit(max(p))) {
                 p.first = 0;
             }
+
+            // The above segment refactored for easier debugging
+            /*
+            int currentMax = max(p);
+            boolean firstEqualsLast = firstDigitEqualsLastDigit(currentMax);
+            if (firstEqualsLast) {
+                p.first = 0;
+            }
+             */
             p = p.rest;
         }
     }
@@ -51,7 +63,8 @@ public class IntListExercises {
      */
     public static boolean firstDigitEqualsLastDigit(int x) {
         int lastDigit = x % 10;
-        while (x > 10) {
+        // BUG: initially, when 10 is passed in, x > 10 does not divide 10 to leave the first digit
+        while (x >= 10) {
             x = x / 10;
         }
         int firstDigit = x % 10;
@@ -77,6 +90,6 @@ public class IntListExercises {
             lst.first *= lst.first;
         }
 
-        return currElemIsPrime || squarePrimes(lst.rest);
+        return squarePrimes(lst.rest) || currElemIsPrime;
     }
 }
