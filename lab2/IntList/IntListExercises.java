@@ -90,6 +90,8 @@ public class IntListExercises {
             lst.first *= lst.first;
         }
 
+        // BUG: currElemIsPrime used to be checked first, which caused the method to return true without
+        // checking the rest of the list for prime elements and modifying such elements
         return squarePrimes(lst.rest) || currElemIsPrime;
     }
 }
