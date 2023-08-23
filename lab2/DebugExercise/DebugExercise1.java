@@ -6,6 +6,8 @@ package DebugExercise;
  */
 public class DebugExercise1 {
     public static int divideThenRound(int top, int bottom) {
+        // The divide and round function takes in parameters as integers, then performs integer divison,
+        // Subsequently setting result to 0 instead of 0.75, then causing Math.round to equal 0 as well
         int quotient = top / bottom;
         int result = Math.round(quotient);
         return result;
