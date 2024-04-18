@@ -94,26 +94,6 @@ public class Model extends Observable {
         setChanged();
     }
 
-    /** Check for higher tiles with equal value and returns the tile's row location if equal.
-     *  If no equal tile is found, return sum of empty rows above myTile + myTile.row(). */
-    public int targetRow(Tile myTile, boolean prevMerge) {
-        int emptyTile = 0;
-
-        int i = board.size() - 1;
-        Tile otherTile;
-        while (i > myTile.row()) {
-            otherTile = board.tile(myTile.col(), i);
-            i -= 1;
-            // Keep track of empty tiles
-            if (otherTile == null) {
-                emptyTile += 1;
-                continue;
-            }
-            if (myTile.value() == otherTile.value() && !prevMerge) { return otherTile.row(); }
-        }
-        return myTile.row() + emptyTile;
-    }
-
     /** Tilt the board toward SIDE. Return true iff this changes the board.
      *
      * 1. If two Tile objects are adjacent in the direction of motion and have
@@ -133,34 +113,68 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
-        Tile myTile;
-        boolean merged;
-        boolean prevMerge;
-        int newRow = 0;
-        Board startingBoard = board;
 
-        board.startViewingFrom(side);
-
-        for (int c = 0; c < board.size(); c += 1) {
-            prevMerge = false;
-            // Start on row[2], row[3] tiles are not required to be moved
-            for (int r = board.size() - 2; r >= 0; r -= 1) {
-                myTile = board.tile(c, r);
-                merged = false;
-                if (myTile != null) {
-                    newRow = targetRow(myTile, prevMerge);
-                    merged = board.move(c, newRow, myTile);
+        this.board.setViewingPerspective(side);
+        // Move all tiles up if empty space allows
+        for (int col = 0; col < size(); col++) {
+            for (int row = size() - 2; row >= 0; row--) {
+                Tile current = this.board.tile(col, row);
+                // If tile exists at current location, move it up if there is empty space
+                if (current != null) {
+                    // aboveRow starts at 3: the top row
+                    // If no tile exists at top row, move current tile there
+                    // If a tile does exist, check the next row under that is still above current tile
+                    int aboveRow = size() - 1;
+                    // Enter the loop to iterate through aboveRows only if aboveRow > row and tile has not been moved
+                    boolean moved = false;
+                    while (aboveRow > row && !moved) {
+                        // If aboveRow til is empty, move current tile there
+                        if (this.board.tile(col, aboveRow) == null) {
+                            this.board.move(col, aboveRow, current);
+                            moved = true;
+                            changed = true;
+                        }
+                        aboveRow--;
+                    }
                 }
-                if (merged) {
-                    score += board.tile(c, newRow).value();
-                    prevMerge = true;
+            }
+
+            // After moving all tiles up, merge if there are eligible adjacent tiles
+            // All existing tiles are now adjacent,
+            // meaning: while iterating through the row, if next tile is null then no additional tiles exist
+            for (int row = size() - 1; row > 0; row--) {
+                Tile current = this.board.tile(col, row);
+                Tile under = this.board.tile(col, row - 1);
+                int underRow = row - 1;
+
+                // If one of the first 2 tiles are null, then no eligible tiles exist in the column
+                if (current == null || under == null) {
+                    break;
+                }
+
+                // If two adjacent tiles hold equal values
+                if (current.value() == under.value()) {
+                    // Move the tile under to the above tile's location
+                    this.board.move(col, row, under);
+                    score += (current.value() + under.value());
+
+                    // Move any tiles that are under the two merged tiles up,
+                    // since new empty space has been created in the original location of the under tile
+                    for (int i = underRow - 1; i >= 0; i--) {
+                        Tile t = this.board.tile(col, i);
+                        // No other tiles exist in the row
+                        if (t == null) {
+                            break;
+                        }
+
+                        this.board.move(col, i + 1, t);
+                    }
+                    changed = true;
                 }
             }
         }
 
-        board.setViewingPerspective(Side.NORTH);
-
-        if (startingBoard == board) { changed = true; }
+        this.board.setViewingPerspective(Side.NORTH);
 
         checkGameOver();
         if (changed) {
@@ -185,12 +199,19 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
-        // Done
-        for (int i = 0; i < b.size(); i += 1) {
-            for (int j = 0; j < b.size(); j += 1) {
-                if (b.tile(i, j) == null) { return true; }
+        if (b.size() < 4) {
+            return true;
+        }
+        else {
+            for (int i = 0; i < b.size(); i++) {
+                for (int j = 0; j < b.size(); j++) {
+                    if (b.tile(i, j) == null) {
+                        return true;
+                    }
+                }
             }
         }
+
         return false;
     }
 
@@ -200,11 +221,11 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // Done
-        for (int i = 0; i < b.size(); i += 1) {
-            for (int j = 0; j < b.size(); j += 1) {
-                if (b.tile(i, j) != null) {
-                    if (b.tile(i, j).value() == MAX_PIECE) { return true; }
+        for (int i = 0; i < b.size(); i++) {
+            for (int j = 0; j < b.size(); j++) {
+                if (b.tile(i, j) == null) continue;
+                if (b.tile(i, j).value() == MAX_PIECE) {
+                    return true;
                 }
             }
         }
@@ -218,20 +239,17 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // Done
         if (emptySpaceExists(b)) { return true; }
 
-        for (int i = 0; i < b.size() - 1; i += 1) {
-            for (int j = 0; j < b.size() - 1; j += 1) {
-                    if (b.tile(i, j).value() == b.tile(i + 1, j).value()
-                        || b.tile(i, j).value() == b.tile(i, j + 1).value()) {
-                        return true;
-                    }
-                }
+        for (int i = 0; i < b.size(); i++) {
+            for (int j = 0; j < b.size(); j++) {
+                boolean rightNeighborEqual = i + 1 < b.size() && b.tile(i, j).value() == b.tile(i + 1, j).value();
+                boolean aboveNeighborEqual = j + 1< b.size() && b.tile(i, j).value() == b.tile(i, j + 1).value();
+                if (rightNeighborEqual|| aboveNeighborEqual) { return true; }
             }
-        /** Edge case for top right tile */
-        return (b.tile(b.size() - 1, b.size() - 1).value() == b.tile(b.size() - 2, b.size() - 1).value())
-                || (b.tile(b.size() - 1, b.size() - 1).value() == b.tile(b.size() - 1, b.size() - 2).value());
+        }
+
+        return false;
     }
 
 
