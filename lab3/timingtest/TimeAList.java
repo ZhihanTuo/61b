@@ -21,12 +21,12 @@ public class TimeAList {
         timeAListConstruction();
     }
 
-    // Helper function for getting time elapsed for AList of x size
-    public static double timeResult(int x) {
+    // Helper function for getting time elapsed for AList of size N
+    public static double timeResult(int N) {
         Stopwatch sw = new Stopwatch();
         AList<Integer> al = new AList<>();
 
-        for (int i = 0; i < x; i++) {
+        for (int i = 0; i < N; i++) {
             al.addLast(i);
         }
         return sw.elapsedTime();
@@ -37,23 +37,13 @@ public class TimeAList {
         AList<Integer> Ns = new AList<>();
         AList<Double> times = new AList<>();
         
-        Ns.addLast(1000);
-        Ns.addLast(2000);
-        Ns.addLast(4000);
-        Ns.addLast(8000);
-        Ns.addLast(16000);
-        Ns.addLast(32000);
-        Ns.addLast(64000);
-        Ns.addLast(128000);
+        for (int i : new int[]{1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000}) {
+            Ns.addLast(i);
+        }
 
-        times.addLast(timeResult(1000));
-        times.addLast(timeResult(2000));
-        times.addLast(timeResult(4000));
-        times.addLast(timeResult(8000));
-        times.addLast(timeResult(16000));
-        times.addLast(timeResult(32000));
-        times.addLast(timeResult(64000));
-        times.addLast(timeResult(128000));
+        for (int i : new int[] {1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000}) {
+            times.addLast(timeResult(i));
+        }
 
         printTimingTable(Ns, times, Ns);
     }
