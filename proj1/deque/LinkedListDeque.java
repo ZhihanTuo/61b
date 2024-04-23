@@ -48,6 +48,7 @@ public class LinkedListDeque<T> {
         // New node will contain item with prev and next both pointing to sentinel
         if (sentinel.next == null) {
             sentinel.next = new Node<>(item, sentinel, sentinel);
+            sentinel.prev = sentinel.next;
             size++;
         } else {
             // If the deque is not empty (sentinel.next points to something)

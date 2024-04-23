@@ -121,4 +121,18 @@ public class LinkedListDequeTest {
             assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
         }
     }
+
+    @Test
+    /* Adds 5 strings to deque; check if get method returns the correct items at each index */
+    public void getItemsTest() {
+        LinkedListDeque<String> catColor = new LinkedListDeque<>();
+
+        int i = 0;
+        for (String s : new String[] {"Orange", "Black", "White", "Grey", "Mixed"}) {
+            catColor.addLast(s);
+            assertEquals("Should return the same string", s, catColor.get(i));
+            i++;
+        }
+
+    }
 }
