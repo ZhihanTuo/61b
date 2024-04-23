@@ -63,7 +63,7 @@ public class LinkedListDeque<T> {
 
     // Returns true if deque is empty, false otherwise
     public boolean isEmpty() {
-        return sentinel.next == null;
+        return sentinel.next == null && sentinel.prev == null;
     }
 
     // Returns num of items in deque
@@ -76,12 +76,56 @@ public class LinkedListDeque<T> {
 
     }
 
-    //
+    // Removes the first item in the deque and returns item removed
     public T removeFirst() {
+        // Returns null if deque is empty
+        if (sentinel.next == null) {
+            return null;
+        }
+
+        // Point sentinel.next to 2nd node in the deque (head.next)
+        // Point prev of that node(head.next) to sentinel
+        // Return the removed head node's item
+        if (size > 0) {
+            Node<T> head = sentinel.next;
+            T removed = head.item;
+
+            sentinel.next = head.next;
+            head.next.prev = sentinel;
+
+            head = null;
+            if (size-- == 1) {
+                sentinel.prev = null;
+                sentinel.next = null;
+            }
+            return removed;
+        }
         return null;
     }
 
+    // Removes the last item in the deque and returns item removed
     public T removeLast() {
+        // Returns null if deque is empty
+        if (sentinel.next == null) {
+            return null;
+        }
+
+        // Point sentinel.prev to the 2nd to last node in the deque (tail.prev)
+        // Point next of that node(tail.prev) to sentinel
+        if (size > 0) {
+            Node<T> tail = sentinel.prev;
+            T removed = tail.item;
+
+            sentinel.prev = tail.prev;
+            tail.prev.next = sentinel;
+
+            tail = null;
+            if (size-- == 1) {
+                sentinel.prev = null;
+                sentinel.next = null;
+            }
+            return removed;
+        }
         return null;
     }
 
