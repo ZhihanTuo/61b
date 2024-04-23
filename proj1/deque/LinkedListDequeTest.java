@@ -130,9 +130,20 @@ public class LinkedListDequeTest {
         int i = 0;
         for (String s : new String[] {"Orange", "Black", "White", "Grey", "Mixed"}) {
             catColor.addLast(s);
-            assertEquals("Should return the same string", s, catColor.get(i));
+            assertEquals("Should be the same strings", s, catColor.get(i));
             i++;
         }
+    }
 
+    @Test
+    /* Adds 5 doubles to the deque from the front; checks that printDeque outputs the same values*/
+    public void printDequeTest() {
+        LinkedListDeque<Double> heights = new LinkedListDeque<>();
+
+        for (double h : new double[]{173.3, 159.5, 193.7, 162.4, 181.3}) {
+            heights.addFirst(h);
+        }
+        System.out.println("Expected: 181.3, 162.4, 193.7, 159.5, 173.3 \n");
+        heights.printDeque();
     }
 }
