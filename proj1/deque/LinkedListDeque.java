@@ -71,9 +71,20 @@ public class LinkedListDeque<T> {
         return size;
     }
 
-    //
+    // Prints the items contained in the deque first to last, each separated by a space
+    // Prints out new line when done
     public void printDeque() {
+        if (sentinel.next == null) {
+            System.out.println("Deque is empty T_T");
+            return;
+        }
 
+        Node<T> p = sentinel.next;
+        while (p != sentinel) {
+            System.out.print(p.item + " ");
+            p = p.next;
+        }
+        System.out.println("\n");
     }
 
     // Removes the first item in the deque and returns item removed
