@@ -60,7 +60,7 @@ public class ArrayDeque<T> implements Deque<T>{
 
         T removed = (++nextFirst == items.length) ? items[nextFirst = 0] : items[nextFirst];
         items[nextFirst] = null;
-        
+
         if (--size < items.length / 4) { resize(items.length / 4); }
         return removed;
     }
@@ -78,8 +78,32 @@ public class ArrayDeque<T> implements Deque<T>{
         return removed;
     }
 
+    /** Returns item at a given position index in the deque
+     * The first item is stored at the index position nextFirst + 1 (0 when nextFirst == items.length - 1)
+     * The last item is stored at the index position nextLast - 1 (items.length - 1 when nextLast = 0) */
     public T get(int index) {
-        return null;
+        int arrayIndex;
+        int firstItem = nextFirst + 1;
+
+        // First item in the deque
+        if (index == 0) {
+            // If nextLast is items.length - 1, incrementing nextFirst will yield an out of bound index
+            // In a circular array, the next position to index items.length - 1 is at index 0
+            arrayIndex =  (nextFirst == items.length - 1) ? 0 : nextFirst + 1;
+        }
+        // Last item in the deque
+        else if (index == size) {
+            // If nextLast is 0, decrementing nextLast will yield an out of bound index
+            // In a circular array, the previous position to index 0 is at index items.length - 1
+            arrayIndex = (nextLast == 0) ? items.length - 1 : nextLast - 1;
+        }
+        else {
+            // Finds position of item to get by adding index to firstItem
+            // If result is out of bounds, subtract by the array length to yield the legal equivalent
+            arrayIndex = (firstItem + index > items.length - 1) ? firstItem + index - items.length  : firstItem + index;
+        }
+
+        return items[arrayIndex];
     }
 
     private void resize(int capacity) {
