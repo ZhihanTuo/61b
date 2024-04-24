@@ -56,14 +56,26 @@ public class ArrayDeque<T> implements Deque<T>{
      * Move the nextFirst index to its position prior to the last addFirst operation
      * If <25% of the array will be utilized after removing an item, resize the array by a factor of 1/4 */
     public T removeFirst() {
-        return null;
+        if (size == 0) { return null; }
+
+        T removed = (++nextFirst == items.length) ? items[nextFirst = 0] : items[nextFirst];
+        items[nextFirst] = null;
+        
+        if (--size < items.length / 4) { resize(items.length / 4); }
+        return removed;
     }
 
     /** Removes the last item in the deque and returns the removed value
      * Move the nextLast index to its position prior to the last addLast operation
      * If <25% of the array will be utilized after removing an item, resize the array by a factor of 1/4 */
     public T removeLast() {
-        return null;
+        if (size == 0) { return null; }
+
+        T removed = (--nextLast < 0) ? items[nextFirst = items.length - 1] : items[nextFirst];
+        items[nextLast] = null;
+
+        if (--size < items.length / 4) { resize(items.length / 4); }
+        return removed;
     }
 
     public T get(int index) {
