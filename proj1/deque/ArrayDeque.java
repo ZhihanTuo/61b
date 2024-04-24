@@ -23,7 +23,7 @@ public class ArrayDeque<T> implements Deque<T>{
             resize(size * 2);
         }
         items[nextFirst] = Item;
-        nextFirst--;
+        if (nextFirst-- == 0) { nextFirst = items.length - 1; }
         size++;
     }
 
@@ -35,7 +35,7 @@ public class ArrayDeque<T> implements Deque<T>{
             resize(size * 2);
         }
         items[nextLast] = Item;
-        nextLast++;
+        if (nextLast++ == items.length - 1) { nextLast = 0; }
         size++;
     }
 
@@ -43,6 +43,7 @@ public class ArrayDeque<T> implements Deque<T>{
         return true;
     }
 
+    /** Returns the size of the deque */
     public int size() {
         return size;
     }
@@ -51,10 +52,16 @@ public class ArrayDeque<T> implements Deque<T>{
 
     }
 
+    /** Removes the first item in the deque and returns the removed value
+     * Move the nextFirst index to its position prior to the last addFirst operation
+     * If <25% of the array will be utilized after removing an item, resize the array by a factor of 1/4 */
     public T removeFirst() {
         return null;
     }
 
+    /** Removes the last item in the deque and returns the removed value
+     * Move the nextLast index to its position prior to the last addLast operation
+     * If <25% of the array will be utilized after removing an item, resize the array by a factor of 1/4 */
     public T removeLast() {
         return null;
     }
