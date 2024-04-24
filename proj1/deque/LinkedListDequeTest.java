@@ -13,7 +13,6 @@ public class LinkedListDequeTest {
     @Test
     /** Adds a few things to the list, checking isEmpty() and size() are correct,
      * finally printing the results.
-     *
      * && is the "and" operation. */
     public void addIsEmptySizeTest() {
 
@@ -55,7 +54,7 @@ public class LinkedListDequeTest {
     }
 
     @Test
-    /* Tests removing from an empty deque */
+    /** Tests removing from an empty deque */
     public void removeEmptyTest() {
 
         LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
@@ -75,7 +74,7 @@ public class LinkedListDequeTest {
     }
 
     @Test
-    /* Check if you can create LinkedListDeques with different parameterized types*/
+    /** Check if you can create LinkedListDeques with different parameterized types*/
     public void multipleParamTest() {
 
         LinkedListDeque<String>  lld1 = new LinkedListDeque<String>();
@@ -92,7 +91,7 @@ public class LinkedListDequeTest {
     }
 
     @Test
-    /* check if null is return when removing from an empty LinkedListDeque. */
+    /** check if null is return when removing from an empty LinkedListDeque. */
     public void emptyNullReturnTest() {
 
         LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
@@ -105,7 +104,7 @@ public class LinkedListDequeTest {
     }
 
     @Test
-    /* Add large number of elements to deque; check if order is correct. */
+    /** Add large number of elements to deque; check if order is correct. */
     public void bigLLDequeTest() {
 
         LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
@@ -123,7 +122,7 @@ public class LinkedListDequeTest {
     }
 
     @Test
-    /* Adds 5 strings to deque; check if get method returns the correct items at each index */
+    /** Adds 5 strings to deque; check if get method returns the correct items at each index */
     public void getItemsTest() {
         LinkedListDeque<String> catColor = new LinkedListDeque<>();
 
@@ -131,12 +130,13 @@ public class LinkedListDequeTest {
         for (String s : new String[] {"Orange", "Black", "White", "Grey", "Mixed"}) {
             catColor.addLast(s);
             assertEquals("Should be the same strings", s, catColor.get(i));
+            assertEquals("Should be the same color", s, catColor.getRecursive(i));
             i++;
         }
     }
 
     @Test
-    /* Adds 5 doubles to the deque from the front; checks that printDeque outputs the same values*/
+    /** Adds 5 doubles to the deque from the front; checks that printDeque outputs the same values */
     public void printDequeTest() {
         LinkedListDeque<Double> heights = new LinkedListDeque<>();
 

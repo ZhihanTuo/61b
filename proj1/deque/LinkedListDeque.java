@@ -1,13 +1,15 @@
 package deque;
 
-public class LinkedListDeque<T> {
-    // Node class
+import java.util.Iterator;
+
+public class LinkedListDeque<T> implements Deque<T> {
+    /** Node class */
     private static class Node<T> {
         public T item;
         public Node<T> prev;
         public Node<T> next;
 
-        // Construct node with item, prev, and next
+        /** Construct node with item, prev, and next */
         public Node(T i, Node<T> p, Node<T> n) {
             item = i;
             prev = p;
@@ -18,13 +20,14 @@ public class LinkedListDeque<T> {
     private Node<T> sentinel;
     private int size;
 
-    // Constructs sentinel node pointing to nothing and sets size to 0
+    /** Constructs sentinel node pointing to nothing and sets size to 0 */
     public LinkedListDeque() {
         sentinel = new Node<>(null, null, null);
         size = 0;
     }
 
-    // Adds an item to the front of the deque
+    @Override
+    /** Adds an item to the front of the deque and increments size */
     public void addFirst(T item) {
         // If the deque is empty, point sentinel.next and sentinel.prev to new node
         // Set head's item to item and point head.next and head.prev to sentinel
@@ -42,7 +45,8 @@ public class LinkedListDeque<T> {
         }
     }
 
-    // Adds an item to the back of the deque
+    @Override
+    /** Adds an item to the back of the deque and increments size */
     public void addLast(T item) {
         // If the deque is empty, point sentinel.next and sentinel.prev to new node
         // New node will contain item with prev and next both pointing to sentinel
@@ -61,18 +65,21 @@ public class LinkedListDeque<T> {
         }
     }
 
-    // Returns true if deque is empty, false otherwise
+    @Override
+    /** Returns true if deque is empty, false otherwise */
     public boolean isEmpty() {
         return sentinel.next == null && sentinel.prev == null;
     }
 
-    // Returns num of items in deque
+    @Override
+    /** Returns num of items in deque */
     public int size() {
         return size;
     }
 
-    // Prints the items contained in the deque first to last, each separated by a space
-    // Prints out new line when done
+    @Override
+    /** Prints the items contained in the deque first to last, each separated by a space
+     * Prints out new line when done */
     public void printDeque() {
         if (sentinel.next == null) {
             System.out.println("Deque is empty T_T");
@@ -87,7 +94,8 @@ public class LinkedListDeque<T> {
         System.out.println("\n");
     }
 
-    // Removes the first item in the deque and returns item removed
+    @Override
+    /** Removes the first item in the deque and returns item removed */
     public T removeFirst() {
         // Returns null if deque is empty
         if (sentinel.next == null) {
@@ -114,7 +122,8 @@ public class LinkedListDeque<T> {
         return null;
     }
 
-    // Removes the last item in the deque and returns item removed
+    @Override
+    /** Removes the last item in the deque and returns item removed */
     public T removeLast() {
         // Returns null if deque is empty
         if (sentinel.next == null) {
@@ -140,8 +149,9 @@ public class LinkedListDeque<T> {
         return null;
     }
 
-    // Returns item at a given index, where 0 is the first item
-    // Returns null if no such item
+    @Override
+    /** Returns item at a given index, where 0 is the first item
+     * Returns null if no such item */
     public T get(int index) {
         int i = 0;
         Node<T> p = sentinel.next;
@@ -152,11 +162,27 @@ public class LinkedListDeque<T> {
         return (i == index) ? p.item : null;
     }
 
-    public T getRecursive() {
-        return null;
+    /** Returns item at a given index, where 0 is the first item
+     * Returns null if no such item */
+    public T getRecursive(int index) {
+        return getRecursive(index, sentinel.next);
     }
 
+    /** Helper method for getRecursive, uses node n to traverse the deque */
+    private T getRecursive(int index, Node<T> n) {
+        if (index == 0) {
+            return n.item;
+        }
+        return getRecursive(index - 1, n.next);
+    }
+
+    @Override
     public boolean equals(Object o) {
         return true;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return null;
     }
 }
