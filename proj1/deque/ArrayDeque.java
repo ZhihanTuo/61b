@@ -92,7 +92,7 @@ public class ArrayDeque<T> implements Deque<T>{
             arrayIndex =  (nextFirst == items.length - 1) ? 0 : nextFirst + 1;
         }
         // Last item in the deque
-        else if (index == size) {
+        else if (index == size - 1) {
             // If nextLast is 0, decrementing nextLast will yield an out of bound index
             // In a circular array, the previous position to index 0 is at index items.length - 1
             arrayIndex = (nextLast == 0) ? items.length - 1 : nextLast - 1;
