@@ -39,16 +39,20 @@ public class ArrayDeque<T> implements Deque<T>{
         size++;
     }
 
-    public boolean isEmpty() {
-        return true;
-    }
-
     /** Returns the size of the deque */
     public int size() {
         return size;
     }
 
+    /** Prints out the items in the deque as a string, starting from the front of the deque at position nextFirst + 1 */
     public void printDeque() {
+        if (size == 0) { return; }
+
+        int startPos = nextFirst + 1;
+        while (nextFirst != startPos) {
+
+            System.out.print(items[nextFirst] + " ");
+        }
 
     }
 
