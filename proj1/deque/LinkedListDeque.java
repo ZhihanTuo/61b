@@ -66,12 +66,6 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
 
     @Override
-    /** Returns true if deque is empty, false otherwise */
-    public boolean isEmpty() {
-        return sentinel.next == null && sentinel.prev == null;
-    }
-
-    @Override
     /** Returns num of items in deque */
     public int size() {
         return size;
@@ -176,12 +170,10 @@ public class LinkedListDeque<T> implements Deque<T> {
         return getRecursive(index - 1, n.next);
     }
 
-    @Override
     public boolean equals(Object o) {
         return true;
     }
 
-    @Override
     public Iterator<T> iterator() {
         return null;
     }
