@@ -60,7 +60,7 @@ public class ArrayDeque<T> implements Deque<T>{
      * Move the nextFirst index to its position prior to the last addFirst operation
      * If <25% of the array will be utilized after removing an item, resize the array by a factor of 1/4 */
     public T removeFirst() {
-        if (size == 0) { throw new RuntimeException("No items to remove"); }
+        if (size == 0) { return null; }
 
         T removed = (++nextFirst == items.length) ? items[nextFirst = 0] : items[nextFirst];
         items[nextFirst] = null;
@@ -73,7 +73,7 @@ public class ArrayDeque<T> implements Deque<T>{
      * Move the nextLast index to its position prior to the last addLast operation
      * If <25% of the array will be utilized after removing an item, resize the array by a factor of 1/4 */
     public T removeLast() {
-        if (size == 0) { throw new RuntimeException("No items to remove"); }
+        if (size == 0) { return null; }
 
         T removed = (--nextLast < 0) ? items[nextFirst = items.length - 1] : items[nextFirst];
         items[nextLast] = null;
@@ -86,7 +86,7 @@ public class ArrayDeque<T> implements Deque<T>{
      * The first item is stored at the index position nextFirst + 1 (0 when nextFirst == items.length - 1)
      * The last item is stored at the index position nextLast - 1 (items.length - 1 when nextLast = 0) */
     public T get(int index) {
-        if (index < 0 || index >= size) { throw new IndexOutOfBoundsException("Index out of bounds"); }
+        if (index < 0 || index >= size) { return null; }
 
         int arrayIndex;
         int firstItem = nextFirst + 1;
