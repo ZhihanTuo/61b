@@ -48,12 +48,11 @@ public class ArrayDeque<T> implements Deque<T>{
     public void printDeque() {
         if (size == 0) { return; }
 
-        int startPos = nextFirst + 1;
-        while (nextFirst != startPos) {
-
-            System.out.print(items[nextFirst] + " ");
-        }
-
+        int position = nextFirst + 1;
+        do {
+            if (position == items.length) { position = 0; }
+            System.out.print(items[position++] + " ");
+        } while (position != (nextFirst + 1));
     }
 
     /** Removes the first item in the deque and returns the removed value
