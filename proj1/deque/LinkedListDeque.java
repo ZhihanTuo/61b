@@ -96,55 +96,52 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     @Override
     /** Removes the first item in the deque and returns item removed */
     public T removeFirst() {
-        // Returns null if deque is empty
-        if (sentinel.next == null) {
-            return null;
-        }
-
-        // Point sentinel.next to 2nd node in the deque (head.next)
-        // Point prev of that node(head.next) to sentinel
         // Return the removed head node's item
         if (size > 0) {
             Node<T> head = sentinel.next;
             T removed = head.item;
 
+            // Connects sentinel with 2nd node in the deque since we are removing the first
+            // Point sentinel.next to 2nd node in the deque (head.next)
+            // Point prev of that node(head.next) to sentinel
             sentinel.next = head.next;
             head.next.prev = sentinel;
 
+            // No longer need
             head = null;
-            if (size-- == 1) {
+            if (--size == 0) {
                 sentinel.prev = null;
                 sentinel.next = null;
             }
+            // Returns removed item
             return removed;
         }
+        // Returns null if deque is empty
         return null;
     }
 
     @Override
     /** Removes the last item in the deque and returns item removed */
     public T removeLast() {
-        // Returns null if deque is empty
-        if (sentinel.next == null) {
-            return null;
-        }
-
-        // Point sentinel.prev to the 2nd to last node in the deque (tail.prev)
-        // Point next of that node(tail.prev) to sentinel
         if (size > 0) {
             Node<T> tail = sentinel.prev;
             T removed = tail.item;
 
+            // Connects sentinel with 2nd to last node in the deque since we are removing the last
+            // Point sentinel.prev to the 2nd to last node in the deque (tail.prev)
+            // Point next of that node(tail.prev) to sentinel
             sentinel.prev = tail.prev;
             tail.prev.next = sentinel;
 
             tail = null;
-            if (size-- == 1) {
+            if (--size == 0) {
                 sentinel.prev = null;
                 sentinel.next = null;
             }
+            // Returns removed item
             return removed;
         }
+        // Returns null if deque is empty
         return null;
     }
 
@@ -179,23 +176,32 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         return true;
     }
 
-//    public Iterator<T> iterator() {
-//        return new LLDequeIterator()();
-//    }
-//
-//    private class LLDequeIterator implements Iterator<T> {
-//        private Node<T> currentNode;
-//
-//        public void LLDequeIterator() {
-//            currentNode = sentinel;
-//        }
-//
-//        public boolean hasNext() {
-//            if ()
-//        }
-//
-//        public T next() {
-//
-//        }
-//    }
+    /** Returns a LLDequeIterator object with next() and hasNext(),
+     * allowing us to iterate through the LLDeque */
+    public Iterator<T> iterator() {
+        return new LLDequeIterator();
+    }
+
+    /** Helper class used to implement iterator, should not be accessible by the user */
+    private class LLDequeIterator implements Iterator<T> {
+        private Node<T> p;
+
+        public LLDequeIterator() {
+            p = sentinel.next;
+        }
+
+        @Override
+        /** Returns true if there are items to iterate through, false otherwise */
+        public boolean hasNext() {
+            return p != null;
+        }
+
+        @Override
+        /** Returns the next item, and iterates to the item after */ 
+        public T next() {
+            T returnedItem = p.item;
+            p = p.next;
+            return returnedItem;
+        }
+    }
 }
