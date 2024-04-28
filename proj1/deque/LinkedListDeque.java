@@ -2,14 +2,14 @@ package deque;
 
 import java.util.Iterator;
 
-public class LinkedListDeque<T> implements Deque<T> {
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     /** Node class */
     private static class Node<T> {
         public T item;
         public Node<T> prev;
         public Node<T> next;
 
-        /** Construct node with item, prev, and next */
+        /** Construct node with item i, prev node p, and next node n */
         public Node(T i, Node<T> p, Node<T> n) {
             item = i;
             prev = p;
@@ -26,18 +26,25 @@ public class LinkedListDeque<T> implements Deque<T> {
         size = 0;
     }
 
+    /** Private helper function for adding a node to an empty deque */
+    // If the deque is empty, point sentinel.next and sentinel.prev to new node
+    // Set head's item to item and point head.next and head.prev to sentinel
+    private void addToEmptyDeque(T item) {
+        sentinel.next = new Node<>(item, sentinel, sentinel);
+        sentinel.prev = sentinel.next;
+        size++;
+    }
+
     @Override
     /** Adds an item to the front of the deque and increments size */
     public void addFirst(T item) {
-        // If the deque is empty, point sentinel.next and sentinel.prev to new node
-        // Set head's item to item and point head.next and head.prev to sentinel
+        // If the deque is empty, add a node that is pointed at by sentinel's prev and next next
+        // and also points back to sentinel with MY own prev and next
         if (sentinel.next == null) {
-            sentinel.next = new Node<>(item, sentinel, sentinel);
-            sentinel.prev = sentinel.next;
-            size++;
+            addToEmptyDeque(item);
         } else {
             // If the deque is not empty (sentinel.next points to something)
-            // Point sentinel.next to the new node
+            // Point sentinel.next to the new node (sentinel.prev still points to the back)
             // Insert new head node with prev pointing to sentinel and next pointing to head(old)
             Node<T> head = sentinel.next;
             sentinel.next = new Node<>(item, sentinel, head);
@@ -48,12 +55,10 @@ public class LinkedListDeque<T> implements Deque<T> {
     @Override
     /** Adds an item to the back of the deque and increments size */
     public void addLast(T item) {
-        // If the deque is empty, point sentinel.next and sentinel.prev to new node
-        // New node will contain item with prev and next both pointing to sentinel
+        // If the deque is empty, add a node that is pointed at by sentinel's prev and next next
+        // and also points back to sentinel with MY own prev and next
         if (sentinel.next == null) {
-            sentinel.next = new Node<>(item, sentinel, sentinel);
-            sentinel.prev = sentinel.next;
-            size++;
+            addToEmptyDeque(item);
         } else {
             // If the deque is not empty (sentinel.next points to something)
             // Point tail.next to new node
@@ -174,7 +179,23 @@ public class LinkedListDeque<T> implements Deque<T> {
         return true;
     }
 
-    public Iterator<T> iterator() {
-        return null;
-    }
+//    public Iterator<T> iterator() {
+//        return new LLDequeIterator()();
+//    }
+//
+//    private class LLDequeIterator implements Iterator<T> {
+//        private Node<T> currentNode;
+//
+//        public void LLDequeIterator() {
+//            currentNode = sentinel;
+//        }
+//
+//        public boolean hasNext() {
+//            if ()
+//        }
+//
+//        public T next() {
+//
+//        }
+//    }
 }
