@@ -21,7 +21,7 @@ public class ArrayDequeTest {
         ad.addLast(2);
         ad.addFirst(1);
 
-        assertArrayEquals()
+        //assertArrayEquals()
     }
 
     @Test

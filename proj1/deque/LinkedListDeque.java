@@ -35,8 +35,8 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         size++;
     }
 
-    @Override
     /** Adds an item to the front of the deque and increments size */
+    @Override
     public void addFirst(T item) {
         // If the deque is empty, add a node that is pointed at by sentinel's prev and next next
         // and also points back to sentinel with MY own prev and next
@@ -52,8 +52,8 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         }
     }
 
-    @Override
     /** Adds an item to the back of the deque and increments size */
+    @Override
     public void addLast(T item) {
         // If the deque is empty, add a node that is pointed at by sentinel's prev and next next
         // and also points back to sentinel with MY own prev and next
@@ -70,15 +70,14 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         }
     }
 
-    @Override
     /** Returns num of items in deque */
     public int size() {
         return size;
     }
 
-    @Override
     /** Prints the items contained in the deque first to last, each separated by a space
      * Prints out new line when done */
+    @Override
     public void printDeque() {
         if (sentinel.next == null) {
             System.out.println("Deque is empty T_T");
@@ -93,8 +92,8 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         System.out.println("\n");
     }
 
-    @Override
     /** Removes the first item in the deque and returns item removed */
+    @Override
     public T removeFirst() {
         // Return the removed head node's item
         if (size > 0) {
@@ -120,8 +119,8 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         return null;
     }
 
-    @Override
     /** Removes the last item in the deque and returns item removed */
+    @Override
     public T removeLast() {
         if (size > 0) {
             Node<T> tail = sentinel.prev;
@@ -145,9 +144,9 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         return null;
     }
 
-    @Override
     /** Returns item at a given index, where 0 is the first item
      * Returns null if no such item */
+    @Override
     public T get(int index) {
         int i = 0;
         Node<T> p = sentinel.next;
@@ -190,14 +189,16 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
             p = sentinel.next;
         }
 
+        /** Returns true if there are items to iterate through, false otherwise
+         * Should be called to verify there are items to iterate through before calling next() */
         @Override
-        /** Returns true if there are items to iterate through, false otherwise */
         public boolean hasNext() {
             return p != null;
         }
 
+        /** Returns the next item, and iterates to the item after
+         * Should only be called if hasNext() is true */
         @Override
-        /** Returns the next item, and iterates to the item after */ 
         public T next() {
             T returnedItem = p.item;
             p = p.next;

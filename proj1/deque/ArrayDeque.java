@@ -24,6 +24,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     /** Adds an item to the front of the deque using the nextFirst index
      * nextFirst will be decremented after each add operation
      * If an item already exists at index nextFirst, the array will be resized before a new item is added */
+    @Override
     public void addFirst(T Item) {
         if (items[nextFirst] != null) {
             resize(size * 2);
@@ -36,6 +37,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     /** Adds an item to the back of the deque using the nextLast index
      * nextLast will be incremented after each add operation
      * If an item already exists at index nextLast, the array will be resized before a new item is added */
+    @Override
     public void addLast(T Item) {
         if (items[nextLast] != null) {
             resize(size * 2);
@@ -51,6 +53,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     }
 
     /** Prints out the items in the deque as a string, starting from the front of the deque at position nextFirst + 1 */
+    @Override
     public void printDeque() {
         if (size == 0) { return; }
 
@@ -64,6 +67,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     /** Removes the first item in the deque and returns the removed value
      * Move the nextFirst index to its position prior to the last addFirst operation
      * If <25% of the array will be utilized after removing an item, resize the array by a factor of 1/4 */
+    @Override
     public T removeFirst() {
         if (size == 0) { return null; }
 
@@ -77,6 +81,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     /** Removes the last item in the deque and returns the removed value
      * Move the nextLast index to its position prior to the last addLast operation
      * If <25% of the array will be utilized after removing an item, resize the array by a factor of 1/4 */
+    @Override
     public T removeLast() {
         if (size == 0) { return null; }
 
@@ -90,6 +95,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     /** Returns item at a given position index in the deque
      * The first item is stored at the index position nextFirst + 1 (0 when nextFirst == items.length - 1)
      * The last item is stored at the index position nextLast - 1 (items.length - 1 when nextLast = 0) */
+    @Override
     public T get(int index) {
         if (index < 0 || index >= size) { return null; }
 
@@ -119,7 +125,6 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
 
     /** Resizes the deque when full and when <25% of the deque is being utilized */
     private void resize(int capacity) {
-
     }
 
     /** Returns an ArrayDequeIterator object with the functions hasNext and next
@@ -137,18 +142,19 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
             current = nextFirst + 1;
         }
 
-        /** Returns true if there are more items in the deque, false otherwise */
+        /** Returns true if there are more items in the deque, false otherwise
+         * Should be called to verify there are items to iterate through before calling next() */
+        @Override
         public boolean hasNext() {
             return size > 0;
         }
 
-        /** Returns the next item if hasNext() is true, returns null if there is no next item */
+        /** Returns the next item if hasNext() is true, returns null if there is no next item
+         * Should only be called if hasNext() is true */
+        @Override
         public T next() {
-            if (hasNext()) {
-                current = (current + 1 == items.length) ? 0 : current + 1;
-                return items[current];
-            }
-            return null;
+            current = (current + 1 == items.length) ? 0 : current + 1;
+            return items[current];
         }
     }
 
