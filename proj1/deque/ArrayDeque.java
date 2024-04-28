@@ -2,18 +2,24 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T> implements Deque<T>{
+public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     private T[] items;
-    private int size;
-    private int nextFirst;
-    private int nextLast;
+    private int size; /* Represents the num of items in the deque, initialized to 0 upon instantiation */
+    private int nextFirst; /* Index location of the position before the first item in the deque */
+    private int nextLast; /* Index location of the position after the last item in the deque */
 
     public ArrayDeque() {
         items = (T[]) new Object[8];
         size = 0;
-        nextFirst = 4;
-        nextLast = 5;
+        nextFirst = 4; /* An arbitrary index position */
+        nextLast = 5; /* An arbitrary index position */
     }
+
+    /*
+    private int nextCircularPosition (int index) {
+
+    }
+*/
 
     /** Adds an item to the front of the deque using the nextFirst index
      * nextFirst will be decremented after each add operation
@@ -111,12 +117,39 @@ public class ArrayDeque<T> implements Deque<T>{
         return items[arrayIndex];
     }
 
+    /** Resizes the deque when full and when <25% of the deque is being utilized */
     private void resize(int capacity) {
 
     }
 
+    /** Returns an ArrayDequeIterator object with the functions hasNext and next
+     * Allowing us to iterate through the deque */
     public Iterator<T> iterator() {
-        return null;
+        return new ArrayDequeIterator();
+    }
+
+    /** Helper class used to implement iterator, hidden from user */
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int current;
+
+        /** Constructs with current starting at the first item in the deque */
+        ArrayDequeIterator() {
+            current = nextFirst + 1;
+        }
+
+        /** Returns true if there are more items in the deque, false otherwise */
+        public boolean hasNext() {
+            return size > 0;
+        }
+
+        /** Returns the next item if hasNext() is true, returns null if there is no next item */
+        public T next() {
+            if (hasNext()) {
+                current = (current + 1 == items.length) ? 0 : current + 1;
+                return items[current];
+            }
+            return null;
+        }
     }
 
     public boolean equals(Object o) {
