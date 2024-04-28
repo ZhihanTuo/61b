@@ -177,8 +177,30 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         }
     }
 
+    /** Returns true if o is a deque that contains the same contents in the same order,
+     * Returns false otherwise */
+    @Override
     public boolean equals(Object o) {
-        return true;
-    }
+        // If o and this contain the same memory address, then they both point to the same object(are equal)
+        if (this == o) { return true; }
 
+        // If o is an instance of dynamic type Deque or any of its subclasses,
+        // casts o as a static type Deque and assigns to oad
+        if (o instanceof Deque oad) {
+            // Check oad has same number of items as me
+            if (oad.size() != this.size) {
+                return false;
+            }
+
+            // Check oad has same items as me, in the same order
+            for (int i = 0; i < this.size; i++) {
+                if (oad.get(i) != this.get(i)) {
+                    return false;
+                }
+            }
+            // o is equal to me if previous checks passed
+            return true;
+        }
+        return false;
+    }
 }
