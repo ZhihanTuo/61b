@@ -144,35 +144,52 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         return null;
     }
 
-    /** Returns item at a given index, where 0 is the first item
+    /** Returns item at a given position, where 0 is the first item
      * Returns null if no such item */
     @Override
-    public T get(int index) {
+    public T get(int position) {
         int i = 0;
         Node<T> p = sentinel.next;
-        while (i < index && p != sentinel) {
+        while (i < position && p != sentinel) {
             p = p.next;
             i++;
         }
-        return (i == index) ? p.item : null;
+        return (i == position) ? p.item : null;
     }
 
-    /** Returns item at a given index, where 0 is the first item
+    /** Returns item at a given position, where 0 is the first item
      * Returns null if no such item */
-    public T getRecursive(int index) {
-        return getRecursive(index, sentinel.next);
+    public T getRecursive(int position) {
+        return getRecursive(position, sentinel.next);
     }
 
     /** Helper method for getRecursive, uses node n to traverse the deque */
-    private T getRecursive(int index, Node<T> n) {
-        if (index == 0) {
+    private T getRecursive(int position, Node<T> n) {
+        if (position == 0) {
             return n.item;
         }
-        return getRecursive(index - 1, n.next);
+        return getRecursive(position - 1, n.next);
     }
 
+    /** Returns true if o is a deque with the same contents in the same order,
+     * Returns false otherwise */
     public boolean equals(Object o) {
-        return true;
+        // If o and this contain the same memory address, then they both point to same same object (are equal)
+        if (this == o) { return true; }
+
+        // If o is an object of dynamic type Deque, then cast into olld as static type Deque
+        if (o instanceof Deque olld) {
+            // Check olld has same number of items as me
+            if (olld.size() != this.size) { return false; }
+
+            // Check olld has the same items as me, in the same order
+            for (int i = 0; i < this.size; i++) {
+                if (olld.get(i) != this.get(i)) { return false; }
+            }
+            // o is equal to me if previous checks passed
+            return true;
+        }
+        return false;
     }
 
     /** Returns a LLDequeIterator object with next() and hasNext(),
