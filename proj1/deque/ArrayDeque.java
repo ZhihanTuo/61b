@@ -26,10 +26,11 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
      * If an item already exists at index nextFirst, the array will be resized before a new item is added */
     @Override
     public void addFirst(T Item) {
-        if (items[nextFirst] != null) {
+        if (nextFirst == nextLast) {
             resize(size * 2);
         }
         items[nextFirst] = Item;
+        // Also could use a ternary operator
         if (nextFirst-- == 0) { nextFirst = items.length - 1; }
         size++;
     }
@@ -39,10 +40,12 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
      * If an item already exists at index nextLast, the array will be resized before a new item is added */
     @Override
     public void addLast(T Item) {
-        if (items[nextLast] != null) {
+        if (nextLast == nextFirst) {
             resize(size * 2);
         }
         items[nextLast] = Item;
+        // Can also circle back to the front of the array using nextLast = (nextLast + 1) % items.length
+        // Also could use a ternary operator
         if (nextLast++ == items.length - 1) { nextLast = 0; }
         size++;
     }
@@ -125,6 +128,22 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
 
     /** Resizes the deque when full and when <25% of the deque is being utilized */
     private void resize(int capacity) {
+        T[] newArray = (T[]) new Object[capacity];
+        // Starting from the first element in the deque (++nextFirst),
+        // copy into newArray element by element with the first element being at position 0
+        for (int i = 0; i < size; i++) {
+            newArray[i] = items[(++nextFirst) % capacity];
+        }
+        // After completion of the above loop, the first item would be at index 0
+        // and the last item would be at size - 1
+        // (e.g. we copy an array containing integers 1-8 into newArray, the size of the old array would be 8
+        // the first item (1) would be at index 0 while the last item (8) would be at index 7 or size - 1)
+
+        /* Set nextFirst and nextLast to proper positions respective to the new array */
+        nextFirst = capacity - 1;
+        nextLast = size;
+        // Assign to items the refactored array
+        items = newArray;
     }
 
     /** Returns an ArrayDequeIterator object with the functions hasNext and next
