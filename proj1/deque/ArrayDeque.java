@@ -15,12 +15,6 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         nextLast = 5; /* An arbitrary index position */
     }
 
-    /*
-    private int nextCircularPosition (int index) {
-
-    }
-*/
-
     /** Adds an item to the front of the deque using the nextFirst index
      * nextFirst will be decremented after each add operation
      * If an item already exists at index nextFirst, the array will be resized before a new item is added */
