@@ -19,11 +19,11 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
      * nextFirst will be decremented after each add operation
      * If an item already exists at index nextFirst, the array will be resized before a new item is added */
     @Override
-    public void addFirst(T Item) {
+    public void addFirst(T item) {
         if (nextFirst == nextLast) {
             resize(size * 2);
         }
-        items[nextFirst] = Item;
+        items[nextFirst] = item;
         // Also could use a ternary operator
         if (nextFirst-- == 0) { nextFirst = items.length - 1; }
         size++;
@@ -33,11 +33,11 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
      * nextLast will be incremented after each add operation
      * If an item already exists at index nextLast, the array will be resized before a new item is added */
     @Override
-    public void addLast(T Item) {
+    public void addLast(T item) {
         if (nextLast == nextFirst) {
             resize(size * 2);
         }
-        items[nextLast] = Item;
+        items[nextLast] = item;
         // Can also circle back to the front of the array using nextLast = (nextLast + 1) % items.length
         // Also could use a ternary operator
         if (nextLast++ == items.length - 1) { nextLast = 0; }
@@ -52,13 +52,19 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     /** Prints out the items in the deque as a string, starting from the front of the deque at position nextFirst + 1 */
     @Override
     public void printDeque() {
+        // Nothing to print if the deque is empty
         if (size == 0) { return; }
-
+        // Sets position of first printed item to the position of the first item in the deque
         int position = nextFirst + 1;
         do {
+            // Circle back to front of array if position goes past the "last" index in the array
             if (position == items.length) { position = 0; }
-            System.out.print(items[position++] + " ");
-        } while (position != (nextFirst + 1));
+            // Prints out the item followed by ", " and iterates to the next item index
+            System.out.print(items[position++] + ", ");
+            // Breaks when the last item is reached (Does not print out, since we do not want ", " succeeding the last item
+        } while (position != (nextLast - 1));
+        // Prints out the last item
+        System.out.print(items[position]);
     }
 
     /** Removes the first item in the deque and returns the removed value
