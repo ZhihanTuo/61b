@@ -73,10 +73,11 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     @Override
     public T removeFirst() {
         if (size == 0) { return null; }
-
+        // Move nextFirst to the position of the first item in the deque and store the first item in removed
         T removed = (++nextFirst == items.length) ? items[nextFirst = 0] : items[nextFirst];
+        // No longer need to store the first item since we are removing it
         items[nextFirst] = null;
-
+        // Resize if <25% of the array is being utilized after removing an item
         if (--size < items.length / 4) { resize(items.length / 4); }
         return removed;
     }
@@ -89,7 +90,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         if (size == 0) { return null; }
         // Move nextLast to the position of the last item in the deque and store the last item in removed
         T removed = (--nextLast < 0) ? items[nextLast = items.length - 1] : items[nextLast];
-        // No longer need to store the removed item
+        // No longer need to store the last item since we are removing it
         items[nextLast] = null;
         // Resize if <25% of the array is being utilized after removing an item
         if (--size < items.length / 4) { resize(items.length / 4); }
