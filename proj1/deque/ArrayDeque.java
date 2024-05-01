@@ -95,7 +95,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         return removed;
     }
 
-    /** Returns item at a given position index in the deque
+    /** Returns item at a given index position in the deque
      * The first item is stored at the index position nextFirst + 1 (0 when nextFirst == items.length - 1)
      * The last item is stored at the index position nextLast - 1 (items.length - 1 when nextLast = 0) */
     @Override
@@ -103,7 +103,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         if (index < 0 || index >= size) { return null; }
 
         int arrayIndex;
+        // For easier to read code
         int firstItem = nextFirst + 1;
+        int lastItem = nextLast - 1;
 
         // First item in the deque
         if (index == 0) {
@@ -115,14 +117,13 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         else if (index == size - 1) {
             // If nextLast is 0, decrementing nextLast will yield an out of bound index
             // In a circular array, the previous position to index 0 is at index items.length - 1
-            arrayIndex = (nextLast == 0) ? items.length - 1 : nextLast - 1;
+            arrayIndex = (nextLast == 0) ? items.length - 1 : lastItem;
         }
         else {
             // Finds position of item to get by adding index to firstItem
             // If result is out of bounds, subtract by the array length to yield the legal equivalent
             arrayIndex = (firstItem + index > items.length - 1) ? firstItem + index - items.length  : firstItem + index;
         }
-
         return items[arrayIndex];
     }
 
@@ -132,7 +133,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         // Starting from the first element in the deque (++nextFirst),
         // copy into newArray element by element with the first element being at position 0
         for (int i = 0; i < size; i++) {
-            newArray[i] = items[(++nextFirst) % capacity];
+            newArray[i] = items[(++nextFirst) % items.length];
         }
         // After completion of the above loop, the first item would be at index 0
         // and the last item would be at size - 1
