@@ -38,7 +38,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     /** Adds an item to the front of the deque and increments size */
     @Override
     public void addFirst(T item) {
-        // If the deque is empty, add a node that is pointed at by sentinel's prev and next next
+        // If the deque is empty, add a node that is pointed at by sentinel's prev and next
         // and also points back to sentinel with MY own prev and next
         if (sentinel.next == null) {
             addToEmptyDeque(item);
@@ -55,7 +55,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     /** Adds an item to the back of the deque and increments size */
     @Override
     public void addLast(T item) {
-        // If the deque is empty, add a node that is pointed at by sentinel's prev and next next
+        // If the deque is empty, add a node that is pointed at by sentinel's prev and next
         // and also points back to sentinel with MY own prev and next
         if (sentinel.next == null) {
             addToEmptyDeque(item);
@@ -174,7 +174,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     /** Returns true if o is a deque with the same contents in the same order,
      * Returns false otherwise */
     public boolean equals(Object o) {
-        // If o and this contain the same memory address, then they both point to same same object (are equal)
+        // If o and this contain the same memory address, then they both point to same object (are equal)
         if (this == o) { return true; }
 
         // If o is an object of dynamic type Deque, then cast into olld as static type Deque
