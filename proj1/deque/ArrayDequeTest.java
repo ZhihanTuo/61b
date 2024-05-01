@@ -2,6 +2,7 @@ package deque;
 
 import org.junit.Assert;
 import org.junit.Test;
+import edu.princeton.cs.algs4.StdRandom;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -9,6 +10,8 @@ import java.io.PrintStream;
 import static org.junit.Assert.*;
 
 public class ArrayDequeTest {
+    /** Tests isEmpty(), size(), addFirst() and addLast() all function as intended when adding to an empty deque
+     * NO RESIZING */
     @Test
     public void testAddToEmptyDeque() {
         ArrayDeque<Integer> ad = new ArrayDeque<>();
@@ -35,6 +38,8 @@ public class ArrayDequeTest {
         }
     }
 
+    /** Tests isEmpty(), size(), addFirst(), addLast() all function as intended when adding to a full deque
+     * TESTS RESIZING TO BIGGER DEQUE*/
     @Test
     public void testAddToFullDeque() {
         ArrayDeque<Boolean> ad = new ArrayDeque<>();
@@ -57,6 +62,8 @@ public class ArrayDequeTest {
         assertEquals(false, ad.get(9));
     }
 
+    /** Tests removeFirst(), removeLast(), isEmpty(), size() all function as intended when removing items from deque
+     * TESTS RESIZING TO SMALLER DEQUE (Viewable through java visualizer) */
     @Test
     public void testRemove() {
         ArrayDeque<Double> units = new ArrayDeque<>();
@@ -65,25 +72,44 @@ public class ArrayDequeTest {
         units.addLast(3.2);
         units.addLast(4.7);
         units.addFirst(5.4);
+        units.addLast(6.8);
+        units.addLast(7.9);
+        units.addLast(8.1);
+        units.addLast(9.3);
 
-        // Order of items in the deque: 5.4, 1.0, 2.5, 3.2, 4.7
-        assertEquals(0, Double.compare(units.removeLast(), 4.7));
-        // 5.4, 1.0, 2.5, 3.2
+        // Order of items in the deque: 5.4, 1.0, 2.5, 3.2, 4.7, 6.8, 7.9, 8.1, 9.3
+        assertEquals(0, Double.compare(units.removeLast(), 9.3));
+        // 5.4, 1.0, 2.5, 3.2, 4.7, 6.8, 7.9, 8.1
         assertEquals(0, Double.compare(units.removeFirst(), 5.4));
-        // 1.0, 2.5, 3.2
+        // 1.0, 2.5, 3.2, 4.7, 6.8, 7.9, 8.1
         assertEquals(0, Double.compare(units.removeFirst(), 1.0));
-        // 2.5, 3.2
+        // 2.5, 3.2, 4.7, 6.8, 7.9, 8.1
         assertEquals(0, Double.compare(units.removeFirst(), 2.5));
-        // 3.2
+        // 3.2, 4.7, 6.8, 7.9, 8.1
         assertEquals(0, Double.compare(units.removeFirst(), 3.2));
-        // No items
+        // 4.7, 6.8, 7.9, 8.1
+        assertEquals(0, Double.compare(units.removeFirst(), 4.7));
+        // 6.8, 7.9, 8.1
+        assertEquals(0, Double.compare(units.removeFirst(), 6.8));
+        // 7.9, 8.1
+        assertEquals(0, Double.compare(units.removeFirst(), 7.9));
+        // 8.1
+        assertEquals(0, Double.compare(units.removeFirst(), 8.1));
+        // No items left
+        assertNull(units.removeFirst());
         assertEquals(0, units.size());
         assertTrue(units.isEmpty());
     }
 
     @Test
     public void testGet() {
-
+        ArrayDeque<String> ad = new ArrayDeque<>();
+        int i = 0;
+        for (String s : new String[] {"Annie", "Bernard", "Cassie", "Dave", "Ethan"}) {
+            ad.addLast(s);
+            assertEquals("Should be the same string", s, ad.get(i));
+            i++;
+        }
     }
 
     @Test
