@@ -87,10 +87,11 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     @Override
     public T removeLast() {
         if (size == 0) { return null; }
-
-        T removed = (--nextLast < 0) ? items[nextFirst = items.length - 1] : items[nextFirst];
+        // Move nextLast to the position of the last item in the deque and store the last item in removed
+        T removed = (--nextLast < 0) ? items[nextLast = items.length - 1] : items[nextLast];
+        // No longer need to store the removed item
         items[nextLast] = null;
-
+        // Resize if <25% of the array is being utilized after removing an item
         if (--size < items.length / 4) { resize(items.length / 4); }
         return removed;
     }
