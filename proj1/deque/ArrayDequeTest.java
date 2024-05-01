@@ -59,7 +59,26 @@ public class ArrayDequeTest {
 
     @Test
     public void testRemove() {
+        ArrayDeque<Double> units = new ArrayDeque<>();
+        units.addFirst(1.0);
+        units.addLast(2.5);
+        units.addLast(3.2);
+        units.addLast(4.7);
+        units.addFirst(5.4);
 
+        // Order of items in the deque: 5.4, 1.0, 2.5, 3.2, 4.7
+        assertEquals(0, Double.compare(units.removeLast(), 4.7));
+        // 5.4, 1.0, 2.5, 3.2
+        assertEquals(0, Double.compare(units.removeFirst(), 5.4));
+        // 1.0, 2.5, 3.2
+        assertEquals(0, Double.compare(units.removeFirst(), 1.0));
+        // 2.5, 3.2
+        assertEquals(0, Double.compare(units.removeFirst(), 2.5));
+        // 3.2
+        assertEquals(0, Double.compare(units.removeFirst(), 3.2));
+        // No items
+        assertEquals(0, units.size());
+        assertTrue(units.isEmpty());
     }
 
     @Test
