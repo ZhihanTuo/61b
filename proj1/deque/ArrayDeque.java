@@ -20,7 +20,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
      * If an item already exists at index nextFirst, the array will be resized before a new item is added */
     @Override
     public void addFirst(T item) {
-        if (nextFirst == nextLast) {
+        if (items[nextFirst] != null) {
             resize(size * 2);
         }
         items[nextFirst] = item;
@@ -34,7 +34,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
      * If an item already exists at index nextLast, the array will be resized before a new item is added */
     @Override
     public void addLast(T item) {
-        if (nextLast == nextFirst) {
+        if (items[nextLast] != null) {
             resize(size * 2);
         }
         items[nextLast] = item;
