@@ -10,7 +10,7 @@ import java.io.PrintStream;
 import static org.junit.Assert.*;
 
 public class ArrayDequeTest {
-    /** Tests isEmpty(), size(), addFirst() and addLast() all function as intended when adding to an empty deque
+    /** Tests that isEmpty(), size(), addFirst() and addLast() all function as intended when adding to an empty deque
      * NO RESIZING */
     @Test
     public void testAddToEmptyDeque() {
@@ -38,7 +38,7 @@ public class ArrayDequeTest {
         }
     }
 
-    /** Tests isEmpty(), size(), addFirst(), addLast() all function as intended when adding to a full deque
+    /** Tests that isEmpty(), size(), addFirst(), addLast() all function as intended when adding to a full deque
      * TESTS RESIZING TO BIGGER DEQUE*/
     @Test
     public void testAddToFullDeque() {
@@ -62,7 +62,7 @@ public class ArrayDequeTest {
         assertEquals(false, ad.get(9));
     }
 
-    /** Tests removeFirst(), removeLast(), isEmpty(), size() all function as intended when removing items from deque
+    /** Tests that removeFirst(), removeLast(), isEmpty(), size() all function as intended when removing items from deque
      * TESTS RESIZING TO SMALLER DEQUE (Viewable through java visualizer) */
     @Test
     public void testRemove() {
@@ -101,6 +101,9 @@ public class ArrayDequeTest {
         assertTrue(units.isEmpty());
     }
 
+    /** Test that get() functions as intended for retrieving items at position i in the deque
+     * Note: The actual position of an item inside the circular array used to implement the deque is not equivalent to
+     its ordered position in the deque */
     @Test
     public void testGet() {
         ArrayDeque<String> ad = new ArrayDeque<>();
@@ -112,11 +115,98 @@ public class ArrayDequeTest {
         }
     }
 
+    /** Test that equals() functions as intended when comparing two ArrayDeque objects */
     @Test
-    public void randomizedTest() {
+    public void testEquals() {
+        ArrayDeque<Long> lad = new ArrayDeque<>();
+        LinkedListDeque<Long> ladCopy = new LinkedListDeque<>();
+        ArrayDeque<String> sad = new ArrayDeque<>();
 
+        // Both are deques that hold no values, should return true
+        assertTrue(lad.equals(ladCopy));
+
+        long hrsInDayEarth = 24;
+        long hrsInDayJupiter = 10;
+        lad.addLast(hrsInDayEarth);
+        ladCopy.addLast(hrsInDayEarth);
+        lad.addFirst(hrsInDayJupiter);
+        ladCopy.addFirst(hrsInDayJupiter);
+
+        sad.addLast("Earth");
+        sad.addFirst("Jupiter");
+
+        // Different subclasses of deque interface, but have the same contents in the same order so are equal
+        assertTrue(lad.equals(ladCopy));
+        // Same subclass, with different content are not equal
+        assertFalse(lad.equals(sad));
+
+        ladCopy = null;
+        // Deque with items is not equal to null object
+        assertFalse(lad.equals(ladCopy));
+
+        ArrayDeque<Long> newAD = lad;
+        // Same memory address, are equal
+        assertTrue(lad.equals(newAD));
     }
 
+    /** Randomly calls ArrayDeque's methods and asserts values for methods with return values */
+    @Test
+    public void randomizedTest() {
+        ArrayDeque<Character> ad = new ArrayDeque<>();
+        ArrayDeque<Character> adCopy = new ArrayDeque<>();
+
+        int size = 0;
+        int N = 10000;
+        for (int i = 0; i < N; i++) {
+            int operation = StdRandom.uniform(0, 6);
+
+            char[] alphabet = new char[]{'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o', 'p','q','r','s','t','u','v','w','x','y','z'};
+            int randomIndex = StdRandom.uniform(0, alphabet.length);
+
+            switch (operation) {
+                // addFirst
+                case 0:
+                    ad.addFirst(alphabet[randomIndex]);
+                    adCopy.addFirst(alphabet[randomIndex]);
+                    System.out.println("Added " + alphabet[randomIndex] + " to front deque");
+                    size += 1;
+                    break;
+                // addLast
+                case 1:
+                    ad.addLast(alphabet[randomIndex]);
+                    adCopy.addLast(alphabet[randomIndex]);
+                    System.out.println("Added " + alphabet[randomIndex] + " to back deque");
+                    size += 1;
+                    break;
+                // removeFirst
+                case 2:
+                    assertEquals(ad.get(0), ad.removeFirst());
+                    adCopy.removeFirst();
+                    if (size > 0) {
+                        size -= 1;
+                    }
+                    break;
+                // removeLast
+                case 3:
+                    assertEquals(ad.get(size - 1), ad.removeLast());
+                    adCopy.removeLast();
+                    if (size > 0) {
+                        size -= 1;
+                    }
+                    break;
+                // size
+                case 4:
+                    assertEquals(size, ad.size());
+                    break;
+                // equals
+                case 5:
+                    assertTrue(ad.equals(adCopy));
+                    break;
+            }
+        }
+    }
+
+    /** Tests that printDeque() correctly prints out the contents in the deque, separated by a comma and space ", " between each item */
     @Test
     public void printDeque() {
         PrintStream standardOut = System.out;
