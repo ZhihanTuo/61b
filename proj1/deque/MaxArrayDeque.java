@@ -29,6 +29,7 @@ public class MaxArrayDeque<T> extends ArrayDeque<T>{
         return maxElem;
     }
 
+
     /** Returns the max element in the deque as governed by the Comparator c
      * Returns null if MaxDequeArray is empty */
     public T max(Comparator<T> c) {
@@ -48,7 +49,8 @@ public class MaxArrayDeque<T> extends ArrayDeque<T>{
         return maxElem;
     }
 
-    /** Comparator class for comparing integers, use as the default comparator when instantiating a MaxArrayDeque */
+
+    /** Comparator class for comparing integers*/
     private static class DefaultIntComparator implements Comparator<Integer> {
         /** How comparison in the IntComparator class is governed:
          * @param o1 the integer compared to
@@ -101,6 +103,59 @@ public class MaxArrayDeque<T> extends ArrayDeque<T>{
         }
     }
 
+    /** Comparator class for comparing integers wrongly*/
+    private static class WrongIntComparator implements Comparator<Integer> {
+        /** How comparison in the WrongIntComparator class is governed:
+         * @param o1 the integer compared to
+         * @param o2 the integer comparing with
+         * o1 is greater than o2 if o1 is numerically smaller than o2
+         * o1 is less than o2 if o1 is numerically bigger than o2
+         * o1 and o2 are equal if they are the same number
+         */
+        @Override
+        public int compare(Integer o1, Integer o2) {
+            if (o1 < o2) { return 1; }
+            else if (o1 > o2 ) { return -1; }
+            return 0;
+        }
+    }
+
+    /** Comparator class for comparing strings wrongly */
+    private static class WrongStringComparator implements Comparator<String> {
+        /** How comparison in the WrongStringComparator class is governed:
+         *
+         * @param o1 the string compared to
+         * @param o2 the string comparing with
+         * o1 is greater than o2 if o1 is a shorter string than o2 (has fewer characters)
+         * o1 is less than o2 if o1 is a shorter string than o2 (has more characters)
+         * o1 is equal to o2 if they are both of the same length (have the same amount of characters)
+         */
+        @Override
+        public int compare(String o1, String o2) {
+            if (o1.length() < o2.length()) { return 1; }
+            else if (o1.length() > o2.length()) { return -1; }
+            return 0;
+        }
+    }
+
+    /** Comparator class for comparing booleans wrongly */
+    private static class WrongBooleanComparator implements Comparator<Boolean> {
+        /** How comparison in the WrongBooleanComparator class is governed:
+         *
+         * @param o1 the boolean compared to
+         * @param o2 the boolean comparing with
+         * o1 is greater than o2 if o1 is false and o2 is true
+         * o1 is less than o2 if o1 is true and o2 is false
+         * o1 is equal to o2 if they both contain the same boolean value (are both true or both false)
+         */
+        @Override
+        public int compare(Boolean o1, Boolean o2) {
+            if (o1 == false && o2 == true) { return 1;}
+            else if (o1 == true && o2 == false) { return -1;}
+            return 0;
+        }
+    }
+
     /** Comparator method accessible to the user for comparing integers */
     public static Comparator<Integer> integerComparator() {
         return new DefaultIntComparator();
@@ -113,5 +168,19 @@ public class MaxArrayDeque<T> extends ArrayDeque<T>{
     /** Comparator method accessible to the user for comparing booleans */
     public static Comparator<Boolean> booleanComparator() {
         return new DefaultBooleanComparator();
+    }
+
+    /** Comparator method accessible to the user for comparing integers */
+    public static Comparator<Integer> integerComparatorWrong() {
+        return new WrongIntComparator();
+    }
+
+    /** Comparator method accessible to the user for comparing strings */
+    public static Comparator<String> stringComparatorWrong() {
+        return new WrongStringComparator();
+    }
+    /** Comparator method accessible to the user for comparing booleans */
+    public static Comparator<Boolean> booleanComparatorWrong() {
+        return new WrongBooleanComparator();
     }
 }
