@@ -19,7 +19,7 @@ public class MaxArrayDeque<T> extends ArrayDeque<T>{
         T maxElem = get(0);
         // Starting from the 2nd item in the deque, iterate through the deque, comparing the current item to the one held in maxElem
         // Assigns current item to maxElem if current item is greater, otherwise go to comparing the next item if current item is equal or less than maxElem
-        for (int i = 1; i <= size(); i++) {
+        for (int i = 1; i < size(); i++) {
             // How the objects are compared is governed by the comparator's compare(),
             // but it should return a positive integer if the 1st argument is greater, 0 if equal, and a negative integer if lesser than the 2nd argument
             if (comparator.compare(get(i), maxElem) > 0) {
@@ -40,7 +40,7 @@ public class MaxArrayDeque<T> extends ArrayDeque<T>{
         T maxElem = get(0);
         // Starting from the 2nd item in the deque, iterate through the deque, comparing the current item to the one held in maxElem
         // Assigns current item to maxElem if current item is greater, otherwise go to comparing the next item if current item is equal or less than maxElem
-        for (int i = 1; i <= size(); i++) {
+        for (int i = 1; i < size(); i++) {
             if (comparator.compare(get(i), maxElem) > 0) {
                 maxElem = get(i);
             }
