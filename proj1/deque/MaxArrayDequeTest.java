@@ -34,9 +34,9 @@ public class MaxArrayDequeTest{
         }
         // Test max returns the longest name in the deque (Isabella)
         assertEquals(names.max(), "Isabella");
-        // Adding a name of the same length as the max item should return the newest addition since compare replaces the old max
+        // Adding a name of the same length as the max item should return the first max item since the two items are of equal length
         names.addLast("Benedict");
-        assertEquals(names.max(), "Benedict");
+        assertEquals(names.max(), "Isabella");
         // Test with a compare method that returns the shortest string, max should then return the shortest name in the deque (Jay)
         assertEquals(names.max(MaxArrayDeque.stringComparatorWrong()), "Jay");
     }
