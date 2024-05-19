@@ -33,8 +33,8 @@ public class ArrayDequeTest {
         assertEquals(8, ad.size());
 
         // Checks that the values stored in ad.size are '1, 2, 3, 4, 5, 6, 7, 8' as expected
-        for (int i : new int[] {1, 2, 3, 4, 5, 6, 7, 8}) {
-            assertEquals(Integer.valueOf(i + 1), Integer.valueOf(ad.get(i)));
+        for (int i : new int[] {0, 1, 2, 3, 4, 5, 6, 7}) {
+            assertEquals(Integer.valueOf(i + 1), ad.get(i));
         }
     }
 
